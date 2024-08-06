@@ -1,0 +1,30 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-color: #000026; /* Background color for the entire page */
+  color: #f20606; /* Text color for contrast */
+  font-family: Arial, sans-serif; /* Font style */
+  height: 100%; /* Ensures body covers full height */
+  overflow-x: hidden; /* Prevents horizontal scroll */
+}
+
+.AppBar {
+  display: flex;
+  justify-content: center; /* Horizontally center the logo */
+  align-items: center; /* Vertically center the logo */
+}
+
+.AppBar-logo {
+  height: 200px; /* Set the height of the logo */
+  max-width: 100%; /* Make the logo responsive */
+}
+
+.App-content {
+  padding: 20px;
+  text-align: center; /* Center text and content inside App-content */
+  font-family: "Roboto", sans-serif; /* Apply Roboto font */
+  font-size: 1.5rem; /* Increase font size */
+  line-height: 0.2; /* Improve readability */
+  font-weight: 700;
+}
