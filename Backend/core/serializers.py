@@ -5,5 +5,5 @@ from .models import *
 class FoodItemSerializer(ModelSerializer):
     class Meta:
         model = FoodItem
-        fields = ['name','desc','price','topping','toppingprice']
+        fields = ['name','desc','price','topping','toppingprice','image']
         # exclude = ['answer','paidHint','keywords']

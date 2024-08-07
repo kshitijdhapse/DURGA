@@ -22,5 +22,6 @@ class FoodDetail(APIView):
                 'price': str(item.price),
                 'topping': item.topping,
                 'topping_price': str(item.topping_price),
+                'image': str(item.image),
             })
         return Response(categorical)
