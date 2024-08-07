@@ -12,5 +12,5 @@ class FoodItem(models.Model):
     topping = models.CharField("Topping", max_length=50, blank=True, null=True)
     topping_price = models.DecimalField("Topping Price", max_digits=10, decimal_places=2, blank=True, null=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.name

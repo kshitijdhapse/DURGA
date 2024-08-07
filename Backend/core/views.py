@@ -14,5 +14,13 @@ class FoodDetail(APIView):
         
         Food = FoodItem.objects.filter(hide = False)
         for item in Food:
-            categorical[item.category].append(item)
+            if item.category not in categorical:
+                categorical[item.category] = []
+            categorical[item.category].append({
+                'name': item.name,
+                'desc': item.description,
+                'price': str(item.price),
+                'topping': item.topping,
+                'topping_price': str(item.topping_price),
+            })
         return Response(categorical)
