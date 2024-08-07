@@ -1,18 +1,22 @@
+/* App.css */
+
 body,
 html {
   margin: 0;
   padding: 0;
-  background-color: #000026; /* Background color for the entire page */
-  color: #f20606; /* Text color for contrast */
-  font-family: Arial, sans-serif; /* Font style */
-  height: 100%; /* Ensures body covers full height */
-  overflow-x: hidden; /* Prevents horizontal scroll */
+  height: 100%;
+  background-color: #000026; /* Set background color for the whole page */
+  color: #ffffff; /* Text color for contrast */
+  font-family: "Roboto", sans-serif; /* Apply Roboto font */
 }
 
 .AppBar {
   display: flex;
   justify-content: center; /* Horizontally center the logo */
   align-items: center; /* Vertically center the logo */
+  height: 190px; /* Set a height for the AppBar */
+  background-color: #000026; /* Background color of the AppBar */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for separation */
 }
 
 .AppBar-logo {
@@ -20,11 +24,97 @@ html {
   max-width: 100%; /* Make the logo responsive */
 }
 
-.App-content {
-  padding: 20px;
-  text-align: center; /* Center text and content inside App-content */
-  font-family: "Roboto", sans-serif; /* Apply Roboto font */
-  font-size: 1.5rem; /* Increase font size */
-  line-height: 0.2; /* Improve readability */
-  font-weight: 700;
+.Menu {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Menu-category {
+  margin-bottom: 10px;
+  width: 100%; /* Full width to allow for horizontal layout */
+}
+
+.Category-title {
+  color: gold;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: gold;
+  color: red;
+  padding: 7px 0;
+}
+
+.Category-items {
+  display: flex;
+  flex-direction: row; /* Display items in a row */
+  justify-content: center;
+  flex-wrap: wrap; /* Allow items to wrap to new lines */
+  gap: 20px; /* Space between items */
+}
+
+.MenuItem {
+  background-color: #2a2929;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-width: 300px;
+  width: calc(33.33% - 20px); /* Three items per row with gap */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  text-align: center;
+  color: white; /* Text color */
+}
+
+.MenuItem h3 {
+  font-size: 1.4rem;
+  color: gold;
+}
+
+.MenuItem p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.MenuItem-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .MenuItem {
+    width: calc(50% - 20px); /* Two items per row on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .MenuItem {
+    width: calc(100% - 20px); /* Full width on very small screens */
+  }
+}
+
+.Category-buttons {
+  display: flex;
+  justify-content: center; /* Center the buttons */
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  gap: 10px; /* Space between buttons */
+  margin: 20px 0; /* Add some vertical spacing */
+}
+
+.Category-button {
+  background-color: #f5a623; /* Button color */
+  color: #252525; /* Button text color */
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold; /* Bold text */
+}
+
+.Category-button:hover {
+  background-color: #f2994a; /* Hover color */
 }
