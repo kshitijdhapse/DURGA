@@ -25,3 +25,8 @@ class FoodDetail(APIView):
                 'image': str(item.image),
             })
         return Response(categorical)
+
+
+class FoodItemViewSet(viewsets.ModelViewSet):
+    queryset = FoodItem.objects.all()
+    serializer_class = FoodItemSerializer

@@ -92,7 +92,7 @@ function App() {
                   price={item.price}
                   topping={item.topping}
                   toppingPrice={item.topping_price}
-                  image={item.image}
+                  image={`http://127.0.0.1:8000/media/${item.image}`}
                 />
               ))}
             </div>
