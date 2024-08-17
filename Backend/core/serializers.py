@@ -7,3 +7,13 @@ class FoodItemSerializer(ModelSerializer):
         model = FoodItem
         fields = ['name','desc','price','topping','toppingprice','image']
         # exclude = ['answer','paidHint','keywords']
+        
+class BranchSerializer(ModelSerializer):
+    class Meta:
+        model = Branch
+        fields = ['location','owner','contact']
+                
+class BranchMenuSerializer(ModelSerializer):
+    class Meta:
+        model = BranchMenu
+        fields = ['location','foodname']

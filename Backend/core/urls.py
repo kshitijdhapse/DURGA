@@ -7,5 +7,6 @@ router.register(r'products', FoodItemViewSet)
 
 urlpatterns = [
     path('menu/', FoodDetail.as_view(), name = 'Menu'),
+    path('menu/<str:branch>/',BranchMenuAPI.as_view(),name='branch-menu'),
     path('api/', include(router.urls)),
 ]
