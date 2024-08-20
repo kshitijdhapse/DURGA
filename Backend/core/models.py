@@ -2,8 +2,12 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
-# class User(AbstractUser):
-#     branch = models.CharField(max_length=50)
+
+class User(AbstractUser):
+    branch = models.CharField(max_length=50)
+    REQUIRED_FIELDS = ['branch']
+    def __str__(self):
+        return self.username
     
 class FoodItem(models.Model):
     name = models.CharField("Name", max_length=50)
@@ -34,7 +38,7 @@ class FoodItem(models.Model):
         return self.name
     
 class Branch(models.Model):
-    location = models.CharField("Location",max_length=50)
+    branch = models.CharField("Branch",max_length=50)
     owner = models.CharField(max_length=50,null=True)
     contact = models.CharField(
         max_length=10,
@@ -42,11 +46,29 @@ class Branch(models.Model):
         null=True
     )
     def __str__(self):
-        return self.location
+        return self.branch
     
 class BranchMenu(models.Model):
-    location = models.ForeignKey(Branch,on_delete=models.CASCADE)
-    foodname = models.ForeignKey(FoodItem,on_delete=models.CASCADE)
+    branch = models.CharField(max_length=50)
     
+    def save(self, *args, **kwargs):
+        if self.price is None:
+            self.price = self.foodname.price
+        
+        if not self.branch:
+            self.branch = self._get_current_user_branch()
+        
+        super().save(*args, **kwargs)
+        
+    foodname = models.ForeignKey(FoodItem,on_delete=models.CASCADE)
+    price = models.DecimalField("Price", max_digits=10, decimal_places=2,null=True)
+    
+    def _get_current_user_branch(self):
+        # Custom method to retrieve the branch of the logged-in user
+        # This is a placeholder; actual implementation will depend on where you are calling save()
+        from django.contrib.auth import get_user
+        user = get_user()
+        return user.branch
+        
     def __str__(self):
-        return f"{self.foodname} at {self.location}"
+        return f"{self.foodname} at {self.branch}"
