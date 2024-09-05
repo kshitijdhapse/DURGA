@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 import Logo from "./logo.png";
 
@@ -8,21 +9,45 @@ const Login = () => {
   const [inputPassword, setInputPassword] = useState("");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    await delay(500);
-    console.log(`Username: ${inputUsername}, Password: ${inputPassword}`);
-    if (inputUsername !== "admin" || inputPassword !== "admin") {
+
+    // Sending the POST request to the backend
+    try {
+      const response = await fetch("http://127.0.0.1:8000/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: inputUsername,
+          password: inputPassword,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Handle successful login
+        // console.log("Login successful:", result);
+        localStorage.setItem("user", JSON.stringify(result));
+        navigate("/items-to-add");
+        setShow(false); // Hide the alert if login is successful
+      } else {
+        // Handle login error (e.g., invalid credentials)
+        console.log("Login failed:", result);
+        setShow(true); // Show the alert
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
       setShow(true);
     }
+
     setLoading(false);
   };
-
-  function delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
 
   return (
     <div style={{ backgroundColor: "#000026", minHeight: "100vh" }}>

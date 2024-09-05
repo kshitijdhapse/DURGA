@@ -93,7 +93,9 @@ class LoginView(APIView):
         
         if user is not None:
             django_login(request, user)
-            return Response({'detail': f'Welcome {username}!!'}, status=status.HTTP_200_OK)
+            # Serialize the user object
+            user_data = UserSerializer(user).data
+            return Response(user_data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
         
