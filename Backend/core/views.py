@@ -64,9 +64,12 @@ class OtherBranchMenuAPI(APIView):
         categorical = {}
         branch = kwargs.get('branch')
         # branch_instance = get_object_or_404(Branch, branch=branch)
-        Food = BranchMenu.objects.exclude(branch=branch)
-        for BranchItem in Food:
-            item=BranchItem.foodname
+        Food = set(BranchMenu.objects.filter(branch=branch).values_list('foodname', flat=True))
+        AllFood = FoodItem.objects.filter(hide=False)
+        result = [item for item in AllFood if item.id not in Food]
+        print(result)
+        for item in result:
+            # item=BranchItem.name
             if item.category not in categorical:
                 categorical[item.category] = []
             categorical[item.category].append({
