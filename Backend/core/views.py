@@ -71,7 +71,7 @@ class OtherBranchMenuAPI(APIView):
         for item in result:
             # item=BranchItem.name
             if item.category not in categorical:
-                categorical[item.category] = []
+                categorical[item.category] = [] 
             categorical[item.category].append({
                 'name': item.name,
                 'desc': item.description,
