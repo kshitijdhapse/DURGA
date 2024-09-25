@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import Logo from "./logo.png";
 
@@ -10,13 +10,14 @@ const Register = () => {
   const [inputPassword, setInputPassword] = useState("");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(""); // For showing success/error message
+  const [alertVariant, setAlertVariant] = useState("danger"); // Control alert type (success, danger)
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
-    // Sending the POST request to the backend
     try {
       const response = await fetch("http://127.0.0.1:8000/register/", {
         method: "POST",
@@ -33,27 +34,24 @@ const Register = () => {
       const result = await response.json();
 
       if (response.ok) {
-        // Handle successful login
-        // console.log("Login successful:", result);
-        // localStorage.setItem("user", JSON.stringify(result));
-        <Alert
-          className="mb-2"
-          variant="success"
-          onClose={() => setShow(false)}
-          dismissible
-        >
-          User registered Successfully!
-        </Alert>;
-        navigate("/");
-        setShow(false); // Hide the alert if login is successful
+        // Show success alert and redirect after registration
+        setAlertMessage("User registered successfully!");
+        setAlertVariant("success");
+        setShow(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000); // Redirect after 2 seconds
       } else {
-        // Handle login error (e.g., invalid credentials)
-        console.log("Registration failed:", result);
-        setShow(true); // Show the alert
+        // Show error message if registration failed
+        setAlertMessage(result.detail || "Registration failed.");
+        setAlertVariant("danger");
+        setShow(true);
       }
     } catch (error) {
-      console.error("Error during registration:", error);
+      setAlertMessage("Error during registration. Please try again.");
+      setAlertVariant("danger");
       setShow(true);
+      console.error("Error during registration:", error);
     }
 
     setLoading(false);
@@ -71,11 +69,11 @@ const Register = () => {
           {show && (
             <Alert
               className="mb-2"
-              variant="danger"
+              variant={alertVariant}
               onClose={() => setShow(false)}
               dismissible
             >
-              Incorrect username or password.
+              {alertMessage}
             </Alert>
           )}
           <Form.Group className="mb-2" controlId="username">
@@ -88,7 +86,7 @@ const Register = () => {
               required
             />
           </Form.Group>
-          <Form.Group className="mb-2" controlId="username">
+          <Form.Group className="mb-2" controlId="branch">
             <Form.Label>Branch</Form.Label>
             <Form.Control
               type="text"
@@ -118,13 +116,12 @@ const Register = () => {
             </Button>
           )}
         </Form>
-        <br></br>
-        <h6
-          style={{ cursor: "pointer" }}
-          className="text-white"
-          onClick={navigate("/")}
-        >
-          Already Registered? Log In
+        <br />
+        <h6 className="text-white">
+          Already Registered?{" "}
+          <Link to="/" style={{ color: "#FFF", textDecoration: "underline" }}>
+            Log In
+          </Link>
         </h6>
         <div
           style={{ backgroundColor: "#000026" }}

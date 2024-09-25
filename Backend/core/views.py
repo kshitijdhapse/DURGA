@@ -116,7 +116,7 @@ class AddToBranchMenu(APIView):
     permission_classes = [IsAuthenticated]  # Ensure only authenticated users can access
 
     def post(self,request,*args, **kwargs):
-        branch = request.User.branch
+        branch = request.user.branch
         items = request.data.get('items',[])
         
         if not items :
@@ -128,7 +128,8 @@ class AddToBranchMenu(APIView):
                 foodname=food_item,
                 price=food_item.price  # Set initial price to the food item's price
             )
-    
+        return Response({"detail": "Items added successfully!"}, status=200)
+
 class UpdateBranchMenuPriceAPI(APIView):
     permission_classes = [IsAuthenticated]  # Ensure only authenticated users can access
 

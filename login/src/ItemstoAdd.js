@@ -2,19 +2,25 @@ import React, { useState, useEffect } from "react";
 import {
   Form,
   Button,
-  Container,
   Row,
   Col,
   Table,
   ListGroup,
+  Alert,
 } from "react-bootstrap";
-import axios from "axios"; // Axios for API requests
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./itemstoadd.css";
 
 const ItemsToAdd = () => {
   const [availableItems, setAvailableItems] = useState([]);
   const [currentBranchItems, setCurrentBranchItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertVariant, setAlertVariant] = useState("danger");
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -26,7 +32,6 @@ const ItemsToAdd = () => {
         );
         const currentBranchMenu = Object.values(branchMenuResponse.data).flat();
         setCurrentBranchItems(currentBranchMenu);
-        console.log(currentBranchItems);
 
         // Fetch items not in current branch
         const otherBranchMenuResponse = await axios.get(
@@ -36,7 +41,6 @@ const ItemsToAdd = () => {
           otherBranchMenuResponse.data
         ).flat();
         setAvailableItems(itemsNotInCurrentBranch);
-        console.log(itemsNotInCurrentBranch);
       } catch (error) {
         console.error("Error fetching menus:", error);
       }
@@ -53,8 +57,54 @@ const ItemsToAdd = () => {
     );
   };
 
-  const handleAddItems = () => {
-    console.log("Items to add:", selectedItems);
+  const handleAddItems = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    try {
+      // Making the POST request using axios
+      const response = await axios.post(
+        "http://127.0.0.1:8000/addbranchitem/",
+        {
+          items: selectedItems, // Passing the selected items in the body
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Token-based auth
+          },
+        }
+      );
+
+      // Check if the response is successful
+      if (response.status === 200) {
+        setAlertMessage("Items added successfully!");
+        setAlertVariant("success");
+        setShow(true);
+        setTimeout(() => {
+          setShow(false);
+          navigate("/items-to-add");
+        }, 2000);
+      } else {
+        setAlertMessage(response.data.detail || "Failed to add items.");
+        setAlertVariant("danger");
+        setShow(true);
+      }
+    } catch (error) {
+      // Handle error during the request
+      if (error.response) {
+        setAlertMessage(
+          error.response.data.detail || "Error during adding items."
+        );
+      } else {
+        setAlertMessage("Error during adding items. Please try again.");
+      }
+      setAlertVariant("danger");
+      setShow(true);
+      console.error("Error during adding item:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,8 +112,17 @@ const ItemsToAdd = () => {
       <h2 className="text-center mb-5">
         Welcome {user.username} from {user.branch}
       </h2>
+      {show && (
+        <Alert
+          className="mb-2"
+          variant={alertVariant}
+          onClose={() => setShow(false)}
+          dismissible
+        >
+          {alertMessage}
+        </Alert>
+      )}
       <Row>
-        <br></br>
         <Col md={6}>
           <h4>Add Dishes</h4>
           <Form onSubmit={(e) => e.preventDefault()}>
@@ -78,7 +137,7 @@ const ItemsToAdd = () => {
               </thead>
               <tbody>
                 {availableItems.map((item) => (
-                  <tr key={item.name}>
+                  <tr key={item.id || item.name}>
                     <td>
                       <Form.Check
                         type="checkbox"
@@ -92,25 +151,34 @@ const ItemsToAdd = () => {
                 ))}
               </tbody>
             </Table>
-            <Button
-              variant="primary"
-              type="button"
-              onClick={handleAddItems}
-              disabled={selectedItems.length === 0}
-              className="w-100"
-            >
-              Add Selected Items
-            </Button>
+            {!loading ? (
+              <Button
+                variant="primary"
+                type="button"
+                onClick={handleAddItems}
+                disabled={selectedItems.length === 0}
+                className="w-100"
+              >
+                Add Items
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                type="button"
+                disabled
+                className="w-100"
+              >
+                Adding Items...
+              </Button>
+            )}
           </Form>
-          <br></br>
         </Col>
         <Col md={6}>
           <h4>Current Branch Menu</h4>
           <ListGroup>
             {currentBranchItems.map((item) => (
-              <ListGroup.Item key={item.name}>
-                {item.name}
-                <br /> {item.price}
+              <ListGroup.Item key={item.id || item.name}>
+                {item.name} <br /> {item.price}
               </ListGroup.Item>
             ))}
           </ListGroup>
