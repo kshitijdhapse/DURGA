@@ -6,8 +6,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login as django_login
+from django.contrib.auth import get_user_model
 
 # DRF imports
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import permissions
 from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.views import APIView
@@ -15,8 +18,19 @@ from rest_framework.response import Response
 from rest_framework import generics, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+import logging
 
+logger = logging.getLogger(__name__)
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+    
 class FoodDetail(APIView):
+    permission_classes = [AllowAny]
     def get(self,request,*args, **kwargs):
         categorical = {}
         
@@ -40,6 +54,7 @@ class FoodItemViewSet(viewsets.ModelViewSet):
     serializer_class = FoodItemSerializer
     
 class BranchMenuAPI(APIView):
+    permission_classes = [AllowAny]
     def get(self,request,*args, **kwargs):
         categorical = {}
         branch = kwargs.get('branch')
@@ -60,6 +75,7 @@ class BranchMenuAPI(APIView):
         return Response(categorical)
 
 class OtherBranchMenuAPI(APIView):
+    permission_classes = [AllowAny]
     def get(self,request,*args, **kwargs):
         categorical = {}
         branch = kwargs.get('branch')
@@ -82,35 +98,39 @@ class OtherBranchMenuAPI(APIView):
             })
         return Response(categorical)
 
-class LoginView(APIView):
-    permission_classes = [AllowAny]  # Allow any user to access this view
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
-    def post(self, request, *args, **kwargs):
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
-        
+
         if not username or not password:
             return Response({'detail': 'Username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         user = authenticate(request, username=username, password=password)
-        
+
         if user is not None:
-            django_login(request, user)
-            # Serialize the user object
+            tokens = get_tokens_for_user(user)
             user_data = UserSerializer(user).data
+            user_data.update(tokens)
             return Response(user_data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
         
-class RegisterView(APIView):
-    permission_classes = [AllowAny]  # Allow any user to access this view
+User = get_user_model()
 
-    def post(self, request, *args, **kwargs):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response({'detail': f'User {user.username} created successfully!'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = UserSerializer
         
 class AddToBranchMenu(APIView):
     permission_classes = [IsAuthenticated]  # Ensure only authenticated users can access

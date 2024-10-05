@@ -1,23 +1,22 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from .models import *
+
 class UserSerializer(ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=True)
+    branch = serializers.PrimaryKeyRelatedField(queryset=Branch.objects.all(), required=False)  # Adjust based on your Branch model
 
     class Meta:
         model = User
-        fields = [
-            'username',
-            'password',
-            'branch',
-        ]
+        fields = ['id', 'username', 'email', 'password', 'branch']
 
-    def create(self,data):
-        user = User.objects.create(
-            username = data['username'],
-            branch = data['branch'],
-        )
-        user.set_password(data['password'])
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        branch = validated_data.pop('branch', None)
+        user = User(**validated_data)
+        if branch:
+            user.branch = branch
+        user.set_password(password)
         user.save()
         return user
     
