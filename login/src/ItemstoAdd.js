@@ -26,16 +26,24 @@ const ItemsToAdd = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        // Fetch current branch menu
         const branchMenuResponse = await axios.get(
-          `http://127.0.0.1:8000/menu/${user.branch}/`
+          `http://127.0.0.1:8000/menu/${user.branch}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token
+            },
+          }
         );
         const currentBranchMenu = Object.values(branchMenuResponse.data).flat();
         setCurrentBranchItems(currentBranchMenu);
 
-        // Fetch items not in current branch
         const otherBranchMenuResponse = await axios.get(
-          `http://127.0.0.1:8000/othermenu/${user.branch}/`
+          `http://127.0.0.1:8000/othermenu/${user.branch}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token
+            },
+          }
         );
         const itemsNotInCurrentBranch = Object.values(
           otherBranchMenuResponse.data
@@ -62,11 +70,10 @@ const ItemsToAdd = () => {
     setLoading(true);
 
     try {
-      // Making the POST request using axios
       const response = await axios.post(
         "http://127.0.0.1:8000/addbranchitem/",
         {
-          items: selectedItems, // Passing the selected items in the body
+          items: selectedItems,
         },
         {
           headers: {
@@ -76,7 +83,6 @@ const ItemsToAdd = () => {
         }
       );
 
-      // Check if the response is successful
       if (response.status === 200) {
         setAlertMessage("Items added successfully!");
         setAlertVariant("success");
@@ -91,7 +97,6 @@ const ItemsToAdd = () => {
         setShow(true);
       }
     } catch (error) {
-      // Handle error during the request
       if (error.response) {
         setAlertMessage(
           error.response.data.detail || "Error during adding items."
@@ -141,7 +146,7 @@ const ItemsToAdd = () => {
                     <td>
                       <Form.Check
                         type="checkbox"
-                        onChange={() => handleSelectItem(item.name)}
+                        onChange={() => handleSelectItem(item.id)}
                       />
                     </td>
                     <td>{item.name}</td>

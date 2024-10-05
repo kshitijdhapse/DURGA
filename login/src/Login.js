@@ -15,7 +15,6 @@ const Login = () => {
     event.preventDefault();
     setLoading(true);
 
-    // Sending the POST request to the backend
     try {
       const response = await fetch("http://127.0.0.1:8000/login/", {
         method: "POST",
@@ -31,22 +30,20 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok) {
-        // Handle successful login
-        // console.log("Login successful:", result);
         localStorage.setItem("user", JSON.stringify(result));
+        localStorage.setItem("token", result.access); // Store the access token
         navigate("/items-to-add");
-        setShow(false); // Hide the alert if login is successful
+        setShow(false);
       } else {
-        // Handle login error (e.g., invalid credentials)
         console.log("Login failed:", result);
-        setShow(true); // Show the alert
+        setShow(true);
       }
     } catch (error) {
       console.error("Error during login:", error);
       setShow(true);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (

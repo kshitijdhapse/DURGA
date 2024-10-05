@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login as django_login
 from django.contrib.auth import get_user_model
 
 # DRF imports
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import AccessToken , RefreshToken
 from rest_framework import permissions
 from rest_framework.permissions import AllowAny
 from rest_framework import status
@@ -118,9 +118,12 @@ class LoginView(APIView):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            tokens = get_tokens_for_user(user)
+            tokens = {
+                'access': str(AccessToken.for_user(user)),
+                'refresh': str(RefreshToken.for_user(user)),
+            }
             user_data = UserSerializer(user).data
-            user_data.update(tokens)
+            user_data.update(tokens)  # Append the tokens
             return Response(user_data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -133,20 +136,21 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = UserSerializer
         
 class AddToBranchMenu(APIView):
-    permission_classes = [IsAuthenticated]  # Ensure only authenticated users can access
+    permission_classes = [IsAuthenticated]
 
-    def post(self,request,*args, **kwargs):
-        branch = request.user.branch
-        items = request.data.get('items',[])
-        
-        if not items :
-            return Response({"detail":"No items selected."}, status = 400)
+    def post(self, request):
+        branch = request.user.branch  # Get the user's branch from the JWT payload
+        items = request.data.get('items', [])
+
+        if not items:
+            return Response({"detail": "No items selected."}, status=400)
+
         for item_id in items:
             food_item = get_object_or_404(FoodItem, id=item_id)
             BranchMenu.objects.create(
                 branch=branch,
                 foodname=food_item,
-                price=food_item.price  # Set initial price to the food item's price
+                price=food_item.price
             )
         return Response({"detail": "Items added successfully!"}, status=200)
 
