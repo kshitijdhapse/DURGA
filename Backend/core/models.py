@@ -39,11 +39,11 @@ class FoodItem(models.Model):
     
 class Branch(models.Model):
     branch = models.CharField("Branch",max_length=50)
-    owner = models.CharField(max_length=50,null=True)
+    owner = models.CharField(max_length=50,null=True,blank=True)
     contact = models.CharField(
         max_length=10,
         validators=[RegexValidator(r'^\d{10}$', 'Enter a valid 10-digit contact number')],
-        null=True
+        null=True,blank=True
     )
     def __str__(self):
         return self.branch

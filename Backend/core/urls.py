@@ -11,6 +11,7 @@ router.register(r'products', FoodItemViewSet)
 urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('branches/', BranchSelectAPI.as_view(), name = 'Branches'),
     path('menu/', FoodDetail.as_view(), name = 'Menu'),
     path('menu/<str:branch>/',BranchMenuAPI.as_view(),name='branch-menu'),
     path('othermenu/<str:branch>/',OtherBranchMenuAPI.as_view(),name='other-branch-menu'),

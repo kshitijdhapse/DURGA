@@ -76,6 +76,13 @@ class BranchMenuAPI(APIView):
             })
         return Response(categorical)
 
+class BranchSelectAPI(APIView):
+    permission_classes = [AllowAny]
+    def get(self,request,*args, **kwargs):
+        Branches=Branch.objects.all()
+        serialized = BranchSerializer(Branches,many=True)
+        return Response(serialized.data)
+
 class OtherBranchMenuAPI(APIView):
     permission_classes = [AllowAny]
     def get(self,request,*args, **kwargs):

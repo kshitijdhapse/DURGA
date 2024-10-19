@@ -29,10 +29,10 @@ class FoodItemSerializer(ModelSerializer):
 class BranchSerializer(ModelSerializer):
     class Meta:
         model = Branch
-        fields = ['location','owner','contact']
+        fields = ['branch','owner','contact']
                 
 class BranchMenuSerializer(ModelSerializer):
     class Meta:
         model = BranchMenu
-        fields = ['location','foodname','price']
-        read_only_fields = ['location','foodname']
+        fields = ['branch','foodname','price']
+        read_only_fields = ['branch','foodname']
