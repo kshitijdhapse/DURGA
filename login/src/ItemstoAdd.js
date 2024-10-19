@@ -35,6 +35,7 @@ const ItemsToAdd = () => {
           }
         );
         const currentBranchMenu = Object.values(branchMenuResponse.data).flat();
+        console.log(currentBranchMenu);
         setCurrentBranchItems(currentBranchMenu);
 
         const otherBranchMenuResponse = await axios.get(
@@ -57,12 +58,13 @@ const ItemsToAdd = () => {
     fetchItems();
   }, [user.branch]);
 
-  const handleSelectItem = (itemId) => {
+  const handleSelectItem = (itemName) => {
     setSelectedItems((prevSelected) =>
-      prevSelected.includes(itemId)
-        ? prevSelected.filter((id) => id !== itemId)
-        : [...prevSelected, itemId]
+      prevSelected.includes(itemName)
+        ? prevSelected.filter((name) => name !== itemName)
+        : [...prevSelected, itemName]
     );
+    console.log(itemName);
   };
 
   const handleAddItems = async (event) => {
@@ -109,6 +111,7 @@ const ItemsToAdd = () => {
       console.error("Error during adding item:", error);
     } finally {
       setLoading(false);
+      window.location.reload();
     }
   };
 
@@ -146,7 +149,7 @@ const ItemsToAdd = () => {
                     <td>
                       <Form.Check
                         type="checkbox"
-                        onChange={() => handleSelectItem(item.id)}
+                        onChange={() => handleSelectItem(item.name)}
                       />
                     </td>
                     <td>{item.name}</td>

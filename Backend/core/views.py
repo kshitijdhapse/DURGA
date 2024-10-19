@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login as django_login
 from django.contrib.auth import get_user_model
+from rest_framework.exceptions import NotFound
+
 
 # DRF imports
 from rest_framework_simplejwt.tokens import AccessToken , RefreshToken
@@ -145,8 +147,8 @@ class AddToBranchMenu(APIView):
         if not items:
             return Response({"detail": "No items selected."}, status=400)
 
-        for item_id in items:
-            food_item = get_object_or_404(FoodItem, id=item_id)
+        for item_name in items:
+            food_item = get_object_or_404(FoodItem, name=item_name)
             BranchMenu.objects.create(
                 branch=branch,
                 foodname=food_item,
