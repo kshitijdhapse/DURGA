@@ -118,3 +118,83 @@ html {
 .Category-button:hover {
   background-color: #f2994a; /* Hover color */
 }
+
+/* Modal container */
+.Modal {
+  background-color: #000026;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px;
+  max-width: 80%;
+  margin: auto;
+  position: relative;
+  top: 10%;
+  transform: translateY(-50%);
+  text-align: center;
+  border: #f2994a;
+}
+
+/* Dark overlay background */
+.ReactModal__Overlay--after-open {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ) !important; /* Add !important here as well */
+}
+
+.ReactModal__Overlay {
+  background-color: rgba(44, 41, 41, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Branch list styles */
+.Branch-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+  display: flex; /* Set flexbox layout */
+  flex-wrap: wrap; /* Allow buttons to wrap if needed */
+  justify-content: center;
+}
+
+.Branch-item {
+  margin-bottom: 10px;
+  margin: 4px;
+}
+
+.Branch-item button {
+  background-color: #f5a623;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.Branch-item button:hover {
+  background-color: #f09204;
+}
+
+/* Modal title */
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Center the modal content text */
+.Modal-content {
+  text-align: center;
+}

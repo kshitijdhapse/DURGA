@@ -3,9 +3,13 @@ import axios from "axios";
 import "./App.css"; // Import general styles
 import logo from "./logo.png";
 import MenuItem from "./MenuItem";
+import Modal from "react-modal";
 
 function App() {
   const [menuData, setMenuData] = useState({});
+  const [usersbranch, setUsersBranch] = useState();
+  const [branches, setBranches] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(true); // Modal starts open
 
   // Initialize refs at the top level of the component
   const coldCoffeeRef = useRef(null);
@@ -37,17 +41,37 @@ function App() {
     Mastani: mastaniRef,
   };
 
-  // Fetch menu data from API
+  // Fetch menu data for the selected branch
+  useEffect(() => {
+    if (usersbranch) {
+      axios
+        .get(`http://127.0.0.1:8000/menu/${usersbranch}`)
+        .then((response) => {
+          setMenuData(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching menu data:", error);
+        });
+    }
+  }, [usersbranch]); // Refetch menu when branch is selected
+
+  // Fetch available branches from API
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/menu/")
+      .get(`http://127.0.0.1:8000/branches`)
       .then((response) => {
-        setMenuData(response.data);
+        setBranches(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching menu data:", error);
+        console.error("Error fetching branches:", error);
       });
   }, []);
+
+  // Handle branch selection
+  const selectBranch = (branch) => {
+    setUsersBranch(branch);
+    setModalIsOpen(false); // Close modal after selection
+  };
 
   // Scroll to the category when the button is clicked
   const scrollToCategory = (category) => {
@@ -61,9 +85,25 @@ function App() {
           <img height={200} src={logo} className="AppBar-logo" alt="logo" />
         </a>
       </header>
+
+      {/* Branch Selection Modal */}
+      <Modal isOpen={modalIsOpen} ariaHideApp={false} className="Modal">
+        <h2>Where are you at ?</h2>
+        <ul className="Branch-list">
+          {branches.map((branch, index) => (
+            <li key={index} className="Branch-item">
+              <button onClick={() => selectBranch(branch.branch)}>
+                {branch.branch}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </Modal>
+
       <div style={{ fontFamily: "sans-serif", textAlign: "center" }}>
         <h3>To choose from:</h3>
       </div>
+
       <div className="Category-buttons">
         {Object.keys(menuData).map((category) => (
           <button
@@ -75,6 +115,7 @@ function App() {
           </button>
         ))}
       </div>
+
       <div className="Menu">
         {Object.entries(menuData).map(([category, items]) => (
           <div
