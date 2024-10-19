@@ -10,12 +10,9 @@ function MenuItem({ name, desc, price, topping, toppingPrice, image }) {
       />
       <h3>{name}</h3>
       <p>{desc}</p>
-      <p>Price: ₹{price}</p>
-      {topping && topping !== "None" && (
-        <p>
-          Topping: {topping} (₹{toppingPrice})
-        </p>
-      )}
+      {/* <p>Price: ₹{price}</p> */}
+      <br></br>
+      {topping && topping !== "None" && <p>Toppings available: {topping}</p>}
     </div>
   );
 }

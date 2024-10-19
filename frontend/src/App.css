@@ -39,9 +39,9 @@ html {
 .Category-title {
   color: gold;
   font-size: 1.4rem;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
-  background-color: gold;
+  background-color: rgb(248, 232, 144);
   color: red;
   padding: 7px 0;
 }
@@ -55,7 +55,7 @@ html {
 }
 
 .MenuItem {
-  background-color: #2a2929;
+  background-color: #cfeeb3;
   padding: 15px;
   margin: 10px;
   border-radius: 8px;
@@ -64,16 +64,19 @@ html {
   width: calc(33.33% - 20px); /* Three items per row with gap */
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
   text-align: center;
-  color: white; /* Text color */
+  color: rgb(0, 0, 0); /* Text color */
 }
 
 .MenuItem h3 {
   font-size: 1.4rem;
-  color: gold;
+  color: rgb(255, 0, 0);
+  margin: 10px;
 }
 
 .MenuItem p {
-  font-size: 1rem;
+  font-size: 18px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
   margin: 5px 0;
 }
 
@@ -81,7 +84,6 @@ html {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
-  margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {
@@ -105,7 +107,7 @@ html {
 }
 
 .Category-button {
-  background-color: #f5a623; /* Button color */
+  background-color: rgb(248, 232, 144); /* Button color */
   color: #252525; /* Button text color */
   border: none;
   padding: 5px 15px;
@@ -132,7 +134,7 @@ html {
   top: 10%;
   transform: translateY(-50%);
   text-align: center;
-  border: #f2994a;
+  border: rgb(248, 232, 144);
 }
 
 /* Dark overlay background */
@@ -173,7 +175,7 @@ html {
 }
 
 .Branch-item button {
-  background-color: #f5a623;
+  background-color: rgb(248, 232, 144);
   color: rgb(0, 0, 0);
   border: none;
   padding: 8px 15px;
