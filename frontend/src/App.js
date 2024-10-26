@@ -3,16 +3,12 @@ import axios from "axios";
 import "./App.css"; // Import general styles
 import logo from "./logo.png";
 import MenuItem from "./MenuItem";
-import Modal from "react-modal";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { UilSwiggy } from "@iconscout/react-unicons";
 
 function App() {
   const [menuData, setMenuData] = useState({});
   const [usersbranch, setUsersBranch] = useState();
-  const [branches, setBranches] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(true); // Modal starts open
-
   // Initialize refs at the top level of the component
   const coldCoffeeRef = useRef(null);
   const breakfastRef = useRef(null);
@@ -43,6 +39,13 @@ function App() {
     Mastani: mastaniRef,
   };
 
+  // Get branch from query parameters
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const branch = params.get("branch");
+    setUsersBranch(branch);
+  }, []);
+
   // Fetch menu data for the selected branch
   useEffect(() => {
     if (usersbranch) {
@@ -57,24 +60,6 @@ function App() {
     }
   }, [usersbranch]); // Refetch menu when branch is selected
 
-  // Fetch available branches from API
-  useEffect(() => {
-    axios
-      .get(`https://durgamenu.onrender.com/branches`)
-      .then((response) => {
-        setBranches(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching branches:", error);
-      });
-  }, []);
-
-  // Handle branch selection
-  const selectBranch = (branch) => {
-    setUsersBranch(branch);
-    setModalIsOpen(false); // Close modal after selection
-  };
-
   // Scroll to the category when the button is clicked
   const scrollToCategory = (category) => {
     categoryRefs[category]?.current?.scrollIntoView({ behavior: "smooth" });
@@ -88,20 +73,8 @@ function App() {
         </a>
       </header>
 
-      {/* Branch Selection Modal */}
-      <Modal isOpen={modalIsOpen} ariaHideApp={false} className="Modal">
-        <h2>Where are you at ?</h2>
-        <ul className="Branch-list">
-          {branches.map((branch, index) => (
-            <li key={index} className="Branch-item">
-              <button onClick={() => selectBranch(branch.branch)}>
-                {branch.branch}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </Modal>
       <br></br>
+
       {usersbranch && (
         <div
           className="Category-title"
