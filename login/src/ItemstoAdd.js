@@ -27,7 +27,7 @@ const ItemsToAdd = () => {
     const fetchItems = async () => {
       try {
         const branchMenuResponse = await axios.get(
-          `http://127.0.0.1:8000/menu/${user.branch}/`,
+          `https://durgamenu.onrender.com/menu/${user.branch}/`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token
@@ -39,7 +39,7 @@ const ItemsToAdd = () => {
         setCurrentBranchItems(currentBranchMenu);
 
         const otherBranchMenuResponse = await axios.get(
-          `http://127.0.0.1:8000/othermenu/${user.branch}/`,
+          `https://durgamenu.onrender.com/othermenu/${user.branch}/`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token
@@ -73,7 +73,7 @@ const ItemsToAdd = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/addbranchitem/",
+        "https://durgamenu.onrender.com/addbranchitem/",
         {
           items: selectedItems,
         },

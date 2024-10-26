@@ -4,6 +4,8 @@ import "./App.css"; // Import general styles
 import logo from "./logo.png";
 import MenuItem from "./MenuItem";
 import Modal from "react-modal";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import { UilSwiggy } from "@iconscout/react-unicons";
 
 function App() {
   const [menuData, setMenuData] = useState({});
@@ -45,7 +47,7 @@ function App() {
   useEffect(() => {
     if (usersbranch) {
       axios
-        .get(`http://127.0.0.1:8000/menu/${usersbranch}`)
+        .get(`https://durgamenu.onrender.com/menu/${usersbranch}`)
         .then((response) => {
           setMenuData(response.data);
         })
@@ -58,7 +60,7 @@ function App() {
   // Fetch available branches from API
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/branches`)
+      .get(`https://durgamenu.onrender.com/branches`)
       .then((response) => {
         setBranches(response.data);
       })
@@ -99,6 +101,19 @@ function App() {
           ))}
         </ul>
       </Modal>
+      <br></br>
+      {usersbranch && (
+        <div
+          className="Category-title"
+          style={{
+            fontFamily: "inherit",
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
+          {`Welcome to ${usersbranch}`} !
+        </div>
+      )}
 
       <div style={{ fontFamily: "sans-serif", textAlign: "center" }}>
         <h3>To choose from:</h3>
@@ -133,13 +148,56 @@ function App() {
                   price={item.price}
                   topping={item.topping}
                   toppingPrice={item.topping_price}
-                  image={`http://127.0.0.1:8000/media/${item.image}`}
+                  image={`https://durgamenu.onrender.com/media/${item.image}`}
                 />
               ))}
             </div>
           </div>
         ))}
       </div>
+      <footer className="Footer">
+        <div className="Footer-content">
+          <div className="Footer-social">
+            <a
+              href="https://www.instagram.com/hoteldurga1987/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className="fab fa-instagram"></i>
+            </a>
+            <a
+              href="https://www.facebook.com/p/owner-of-Hotel-durga-100054278300215/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <a
+              href="https://g.co/kgs/621FDxF"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className="fab fa-google"></i>
+            </a>
+            <a
+              href="https://www.swiggy.com/city/pune/hotel-durga-kothrud-rest756038"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <UilSwiggy />
+            </a>
+            <a
+              href="https://www.zomato.com/pune/hotel-durga-1-kothrud"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i className="fas fa-utensils"></i> {/* Zomato */}
+            </a>
+          </div>
+          <p>For enquiries: 9823049723 | 9665660166 </p>
+          <p>Email us: d2dhapse11@gmail.com | dhapsemangesh@gmail.com</p>
+        </div>
+      </footer>
     </div>
   );
 }
