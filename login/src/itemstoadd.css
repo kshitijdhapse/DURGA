@@ -1,0 +1,75 @@
+/* itemstoadd.css */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000026;
+  color: white;
+}
+
+.container {
+  background-color: #000026;
+  color: white;
+  padding: 20px;
+  min-height: 100vh;
+  width: 100vw; /* Ensure full viewport width */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h2,
+h4 {
+  color: #fff;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0; /* Remove any default margin */
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%; /* Ensure full width */
+}
+
+.table-container,
+.list-group-container {
+  width: 100%;
+}
+
+.table-container table {
+  width: 100%;
+  color: #000;
+}
+
+.list-group-container .list-group-item {
+  background-color: #000026;
+  color: white;
+  border: 1px solid #444;
+}
+
+@media (min-width: 768px) {
+  .row {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .col {
+    flex: 1;
+    margin: 0 10px;
+    max-width: 100%; /* Ensure full width on laptops */
+  }
+
+  .table-container,
+  .list-group-container {
+    width: 100%;
+  }
+}

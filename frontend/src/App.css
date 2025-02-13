@@ -1,0 +1,238 @@
+/* App.css */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000026; /* Set background color for the whole page */
+  color: #ffffff; /* Text color for contrast */
+  font-family: "Roboto", sans-serif; /* Apply Roboto font */
+}
+
+.AppBar {
+  display: flex;
+  justify-content: center; /* Horizontally center the logo */
+  align-items: center; /* Vertically center the logo */
+  height: 190px; /* Set a height for the AppBar */
+  background-color: #000026; /* Background color of the AppBar */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for separation */
+}
+
+.AppBar-logo {
+  height: 200px; /* Set the height of the logo */
+  max-width: 100%; /* Make the logo responsive */
+}
+
+.Menu {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Menu-category {
+  margin-bottom: 10px;
+  width: 100%; /* Full width to allow for horizontal layout */
+}
+
+.Category-title {
+  color: gold;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  text-align: center;
+  background-color: rgb(248, 232, 144);
+  color: red;
+  padding: 7px 0;
+}
+
+.Category-items {
+  display: flex;
+  flex-direction: row; /* Display items in a row */
+  justify-content: center;
+  flex-wrap: wrap; /* Allow items to wrap to new lines */
+  gap: 20px; /* Space between items */
+}
+
+.MenuItem {
+  background-color: #cfeeb3;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-width: 300px;
+  width: calc(33.33% - 20px); /* Three items per row with gap */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  text-align: center;
+  color: rgb(0, 0, 0); /* Text color */
+}
+
+.MenuItem h3 {
+  font-size: 1.4rem;
+  color: rgb(255, 0, 0);
+  margin: 10px;
+}
+
+.MenuItem p {
+  font-size: 18px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  margin: 5px 0;
+}
+
+.MenuItem-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .MenuItem {
+    width: calc(50% - 20px); /* Two items per row on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .MenuItem {
+    width: calc(100% - 20px); /* Full width on very small screens */
+  }
+}
+
+.Category-buttons {
+  display: flex;
+  justify-content: center; /* Center the buttons */
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  gap: 10px; /* Space between buttons */
+  margin: 20px 0; /* Add some vertical spacing */
+}
+
+.Category-button {
+  background-color: rgb(248, 232, 144); /* Button color */
+  color: #252525; /* Button text color */
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold; /* Bold text */
+}
+
+.Category-button:hover {
+  background-color: #f2994a; /* Hover color */
+}
+
+/* Modal container */
+.Modal {
+  background-color: #000026;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px;
+  max-width: 80%;
+  margin: auto;
+  position: relative;
+  top: 10%;
+  transform: translateY(-50%);
+  text-align: center;
+  border: rgb(248, 232, 144);
+}
+
+/* Dark overlay background */
+.ReactModal__Overlay--after-open {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ) !important; /* Add !important here as well */
+}
+
+.ReactModal__Overlay {
+  background-color: rgba(44, 41, 41, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Branch list styles */
+.Branch-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+  display: flex; /* Set flexbox layout */
+  flex-wrap: wrap; /* Allow buttons to wrap if needed */
+  justify-content: center;
+}
+
+.Branch-item {
+  margin-bottom: 10px;
+  margin: 4px;
+}
+
+.Branch-item button {
+  background-color: rgb(248, 232, 144);
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.Branch-item button:hover {
+  background-color: #f09204;
+}
+
+/* Modal title */
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Center the modal content text */
+.Modal-content {
+  text-align: center;
+}
+
+/* Footer Styles */
+.Footer {
+  background-color: rgb(248, 232, 144);
+  padding: 17px;
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #000000;
+  font-weight: bolder;
+}
+
+.Footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.Footer-social {
+  margin-bottom: 12px;
+}
+
+.Footer-social a {
+  color: #000000;
+  margin: 0 10px;
+  font-size: 24px;
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.Footer-social a:hover {
+  color: #ff0000; /* Accent color for hover effect */
+}
+
+.Footer p {
+  margin: 2px 0;
+  font-size: 15px;
+}

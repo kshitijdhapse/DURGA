@@ -1,0 +1,85 @@
+/* General container for the update menu */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #000026;
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+/* Form container */
+.dashboard-form {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Header styling */
+.dashboard-header {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+/* Form group styling */
+.dashboard-form-group {
+  margin-bottom: 15px;
+}
+
+/* Labels */
+.dashboard-form label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #000000;
+}
+
+/* Input fields */
+.dashboard-form input,
+.dashboard-form textarea,
+.dashboard-form select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Textarea for description */
+.dashboard-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Submit button */
+.dashboard-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Footer */
+.dashboard-footer {
+  text-align: center;
+  color: #777;
+  margin-top: 20px;
+  font-size: 14px;
+}
