@@ -56,7 +56,7 @@ html {
 
 .MenuItem {
   background-color: #cfeeb3;
-  padding: 15px;
+  padding: 10px;
   margin: 10px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -68,15 +68,15 @@ html {
 }
 
 .MenuItem h3 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: rgb(255, 0, 0);
-  margin: 10px;
+  margin: 8px;
 }
 
 .MenuItem p {
   font-size: 18px;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Sans", Arial,
+    sans-serif;
   margin: 5px 0;
 }
 
@@ -88,14 +88,42 @@ html {
 
 @media (max-width: 768px) {
   .MenuItem {
-    width: calc(50% - 20px); /* Two items per row on smaller screens */
+    width: calc(50% - 10px);
+    /* Two items per row on smaller screens */
   }
 }
 
 @media (max-width: 480px) {
-  .MenuItem {
-    width: calc(100% - 20px); /* Full width on very small screens */
+  .Category-items {
+    display: flex;
+    flex-wrap: wrap; /* Ensure proper spacing */
   }
+
+  .MenuItem {
+    width: calc(50% - 4px); /* Ensure two items fit in a row */
+    margin: 5px 0; /* Reduce top and bottom margin */
+    padding: 8px;
+    box-sizing: border-box;
+    height: auto;
+  }
+
+  .MenuItem img {
+    width: 100%; /* Ensure images fit within the card */
+    height: auto; /* Keep aspect ratio */
+  }
+}
+
+.Category-items {
+  gap: 8px; /* Reduce gap to make better use of space */
+}
+
+.MenuItem img {
+  max-width: 100%; /*Scale down images slightly */
+  width: 100%; /* Ensures the image always fits the container */
+  height: auto; /*Maintains the aspect ratio */
+  max-height: 250px; /* Prevents images from getting too large */
+  object-fit: contain; /*Ensures the entire image is visible without cropping*/
+  border-radius: 8px;
 }
 
 .Category-buttons {

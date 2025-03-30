@@ -9,8 +9,10 @@ import { UilSwiggy } from "@iconscout/react-unicons";
 function App() {
   const [menuData, setMenuData] = useState({});
   const [usersbranch, setUsersBranch] = useState();
+
   // Initialize refs at the top level of the component
   const coldCoffeeRef = useRef(null);
+  const mastaniRef = useRef(null);
   const breakfastRef = useRef(null);
   const sandwichRef = useRef(null);
   const misalPavRef = useRef(null);
@@ -21,11 +23,11 @@ function App() {
   const pizzaRef = useRef(null);
   const coldDrinkRef = useRef(null);
   const iceCreamRef = useRef(null);
-  const mastaniRef = useRef(null);
 
   // Map categories to their corresponding refs
   const categoryRefs = {
     "Cold Coffee": coldCoffeeRef,
+    Mastani: mastaniRef,
     Breakfast: breakfastRef,
     Sandwich: sandwichRef,
     "Misal Pav": misalPavRef,
@@ -36,8 +38,23 @@ function App() {
     Pizza: pizzaRef,
     "Cold Drink": coldDrinkRef,
     "Ice Cream": iceCreamRef,
-    Mastani: mastaniRef,
   };
+
+  // Custom order for categories
+  const categoryOrder = [
+    "Cold Coffee",
+    "Mastani",
+    "Shakes",
+    "Ice Cream",
+    "Breakfast",
+    "Dosa",
+    "Sandwich",
+    "Misal Pav",
+    "Pav Bhaji",
+    "Bhurji",
+    "Pizza",
+    "Cold Drink",
+  ];
 
   // Get branch from query parameters
   useEffect(() => {
@@ -73,7 +90,7 @@ function App() {
         </a>
       </header>
 
-      <br></br>
+      <br />
 
       {usersbranch && (
         <div
@@ -92,42 +109,49 @@ function App() {
         <h3>To choose from:</h3>
       </div>
 
+      {/* Category Buttons */}
       <div className="Category-buttons">
-        {Object.keys(menuData).map((category) => (
-          <button
-            key={category}
-            onClick={() => scrollToCategory(category)}
-            className="Category-button"
-          >
-            {category}
-          </button>
-        ))}
+        {categoryOrder
+          .filter((category) => menuData[category])
+          .map((category) => (
+            <button
+              key={category}
+              onClick={() => scrollToCategory(category)}
+              className="Category-button"
+            >
+              {category}
+            </button>
+          ))}
       </div>
 
+      {/* Menu Categories */}
       <div className="Menu">
-        {Object.entries(menuData).map(([category, items]) => (
-          <div
-            key={category}
-            className="Menu-category"
-            ref={categoryRefs[category]} // Assign ref to each category
-          >
-            <h2 className="Category-title">{category}</h2>
-            <div className="Category-items">
-              {items.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  name={item.name}
-                  desc={item.desc}
-                  price={item.price}
-                  topping={item.topping}
-                  toppingPrice={item.topping_price}
-                  image={`https://durgamenu.onrender.com/media/${item.image}`}
-                />
-              ))}
+        {categoryOrder
+          .filter((category) => menuData[category]) // Ensure category exists in menuData
+          .map((category) => (
+            <div
+              key={category}
+              className="Menu-category"
+              ref={categoryRefs[category]} // Assign ref to each category
+            >
+              <h2 className="Category-title">{category}</h2>
+              <div className="Category-items">
+                {menuData[category].map((item, index) => (
+                  <MenuItem
+                    key={index}
+                    name={item.name}
+                    desc={item.desc}
+                    price={item.price}
+                    toppingPrice={item.topping_price}
+                    image={`https://durgamenu.onrender.com/media/${item.image}`}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
+
+      {/* Footer */}
       <footer className="Footer">
         <div className="Footer-content">
           <div className="Footer-social">
