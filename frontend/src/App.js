@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-import axios from "axios";
-import "./App.css"; // Import general styles
+import Papa from "papaparse";
+import "./App.css";
 import logo from "./logo.png";
 import MenuItem from "./MenuItem";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -10,39 +10,36 @@ function App() {
   const [menuData, setMenuData] = useState({});
   const [usersbranch, setUsersBranch] = useState();
 
-  // Initialize refs at the top level of the component
-  const coldCoffeeRef = useRef(null);
-  const mastaniRef = useRef(null);
-  const breakfastRef = useRef(null);
-  const sandwichRef = useRef(null);
-  const misalPavRef = useRef(null);
-  const dosaRef = useRef(null);
-  const pavBhajiRef = useRef(null);
-  const bhurjiRef = useRef(null);
-  const shakesRef = useRef(null);
-  const pizzaRef = useRef(null);
-  const coldDrinkRef = useRef(null);
-  const iceCreamRef = useRef(null);
+  // Branch → CSV URL mapping (replace gid with correct IDs for each tab)
+  const sheetURLs = {
+    MainBranch:
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vRLEaSr-g9olSw6cZg_Uv-YK7mrwCVpw1cj8x2C2nAYPbIUlpu-_mb-zcv6JO6GYecH4D6fQavoCFyz/pub?gid=0&single=true&output=csv",
+    // Add more branches here...
+  };
 
-  // Map categories to their corresponding refs
+  // Refs for categories
   const categoryRefs = {
-    "Cold Coffee": coldCoffeeRef,
-    Mastani: mastaniRef,
-    Breakfast: breakfastRef,
-    Sandwich: sandwichRef,
-    "Misal Pav": misalPavRef,
-    Dosa: dosaRef,
-    "Pav Bhaji": pavBhajiRef,
-    Bhurji: bhurjiRef,
-    Shakes: shakesRef,
-    Pizza: pizzaRef,
-    "Cold Drink": coldDrinkRef,
-    "Ice Cream": iceCreamRef,
+    "Cold Coffee": useRef(null),
+    Mastani: useRef(null),
+    Breakfast: useRef(null),
+    Sandwich: useRef(null),
+    "Misal Pav": useRef(null),
+    Dosa: useRef(null),
+    "Pav Bhaji": useRef(null),
+    Bhurji: useRef(null),
+    Shakes: useRef(null),
+    Pizza: useRef(null),
+    "Cold Drink": useRef(null),
+    "Ice Cream": useRef(null),
+    Snacks: useRef(null),
+    "Quick Bites": useRef(null),
   };
 
   // Custom order for categories
   const categoryOrder = [
     "Cold Coffee",
+    "Snacks",
+    "Quick Bites",
     "Mastani",
     "Shakes",
     "Ice Cream",
@@ -63,27 +60,45 @@ function App() {
     setUsersBranch(branch);
   }, []);
 
-  // Fetch menu data for the selected branch
+  // Fetch and parse menu data from Google Sheets
   useEffect(() => {
-    if (usersbranch) {
-      axios
-        .get(`https://durgamenu.onrender.com/menu/${usersbranch}`)
-        .then((response) => {
-          setMenuData(response.data);
+    if (usersbranch && sheetURLs[usersbranch]) {
+      fetch(sheetURLs[usersbranch])
+        .then((res) => res.text())
+        .then((csv) => {
+          Papa.parse(csv, {
+            header: true,
+            skipEmptyLines: true,
+            complete: (results) => {
+              // Group items by category
+              const grouped = results.data.reduce((acc, row) => {
+                if (!row.Category) return acc; // skip empty rows
+                if (!acc[row.Category]) acc[row.Category] = [];
+                acc[row.Category].push({
+                  name: row.Name,
+                  desc: row.Desc,
+                  price: row.Price,
+                  topping_price: row["Topping Price"],
+                  image: row.ImageURL, // can be direct link
+                });
+                return acc;
+              }, {});
+              setMenuData(grouped);
+            },
+          });
         })
-        .catch((error) => {
-          console.error("Error fetching menu data:", error);
-        });
+        .catch((err) => console.error("Error fetching sheet:", err));
     }
-  }, [usersbranch]); // Refetch menu when branch is selected
+  }, [usersbranch]);
 
-  // Scroll to the category when the button is clicked
+  // Scroll to category when button clicked
   const scrollToCategory = (category) => {
     categoryRefs[category]?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <div>
+      {/* Header */}
       <header className="AppBar">
         <a href="https://hoteldurgapune.com/">
           <img height={200} src={logo} className="AppBar-logo" alt="logo" />
@@ -92,6 +107,7 @@ function App() {
 
       <br />
 
+      {/* Branch Welcome */}
       {usersbranch && (
         <div
           className="Category-title"
@@ -105,6 +121,7 @@ function App() {
         </div>
       )}
 
+      {/* Title */}
       <div style={{ fontFamily: "sans-serif", textAlign: "center" }}>
         <h3>To choose from:</h3>
       </div>
@@ -124,15 +141,15 @@ function App() {
           ))}
       </div>
 
-      {/* Menu Categories */}
+      {/* Menu Items */}
       <div className="Menu">
         {categoryOrder
-          .filter((category) => menuData[category]) // Ensure category exists in menuData
+          .filter((category) => menuData[category])
           .map((category) => (
             <div
               key={category}
               className="Menu-category"
-              ref={categoryRefs[category]} // Assign ref to each category
+              ref={categoryRefs[category]}
             >
               <h2 className="Category-title">{category}</h2>
               <div className="Category-items">
@@ -143,7 +160,7 @@ function App() {
                     desc={item.desc}
                     price={item.price}
                     toppingPrice={item.topping_price}
-                    image={`https://durgamenu.onrender.com/media/${item.image}`}
+                    image={item.image} // direct from sheet
                   />
                 ))}
               </div>
@@ -188,7 +205,7 @@ function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <i className="fas fa-utensils"></i> {/* Zomato */}
+              <i className="fas fa-utensils"></i>
             </a>
           </div>
           <p>For enquiries: 9823049723 | 9665660166 </p>
